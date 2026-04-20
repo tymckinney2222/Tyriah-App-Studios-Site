@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tyriah App Studios — Software, made by one person, for real humans.</title>
+<meta name="description" content="An indie app studio building useful, usable software. No bloat, no dark patterns, no quarterly roadmaps. Made by one person in Loveland, Colorado.">
+<meta property="og:title" content="Tyriah App Studios">
+<meta property="og:description" content="Software, made by one person, for real humans.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tyriahappstudios.com">
+<meta name="theme-color" content="#1a0d2e">
+
+<link rel="icon" href="tyriah-logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #14092a;
+    --ink-2: #1a0d2e;
+    --ink-3: #221340;
+    --purple-deep: #3d1f5f;
+    --purple: #6a3aa3;
+    --purple-bright: #9b4dca;
+    --purple-glow: #b066d9;
+    --cream: #faf8ff;
+    --cream-dim: rgba(250, 248, 255, 0.72);
+    --cream-faint: rgba(250, 248, 255, 0.45);
+    --cream-faintest: rgba(250, 248, 255, 0.18);
+    --line: rgba(176, 102, 217, 0.12);
+    --line-bright: rgba(176, 102, 217, 0.32);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background: var(--ink);
+    color: var(--cream);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* ─── Atmospheric background — deep gradient + circuit pattern ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(155, 77, 202, 0.18), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 40%, rgba(106, 58, 163, 0.15), transparent 70%),
+      radial-gradient(ellipse 100% 60% at 50% 100%, rgba(61, 31, 95, 0.3), transparent 60%),
+      var(--ink);
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  /* Subtle grid — circuit-board nod, very faint */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(176, 102, 217, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(176, 102, 217, 0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
+    z-index: -1;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 100% 100% at 50% 30%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 30%, black 30%, transparent 80%);
+  }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ─── Top nav — minimal ─── */
+  nav {
+    padding: 28px 0;
+    position: relative;
+    z-index: 10;
+  }
+  .nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--cream-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-mark:hover { color: var(--cream); }
+  .nav-mark-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--purple-glow);
+    box-shadow: 0 0 12px var(--purple-glow);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+  }
+  .nav-links a {
+    color: var(--cream-faint);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--purple-glow); }
+  @media (max-width: 600px) {
+    .nav-links { gap: 18px; font-size: 11.5px; }
+  }
+
+  /* ─── Hero ─── */
+  .hero {
+    padding: 80px 0 120px;
+    text-align: center;
+    position: relative;
+  }
+  .hero-logo {
+    width: 200px;
+    height: auto;
+    margin: 0 auto 56px;
+    display: block;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.1s forwards;
+    filter: drop-shadow(0 12px 60px rgba(155, 77, 202, 0.25));
+  }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--purple-glow);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+  .hero-eyebrow::before { content: '// '; opacity: 0.5; }
+  .hero-tagline {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(32px, 6vw, 56px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    max-width: 880px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+  .hero-tagline em {
+    font-style: italic;
+    color: var(--purple-glow);
+    font-weight: 500;
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--cream-faint);
+    margin-top: 28px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+  .hero-cta {
+    margin-top: 48px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple-bright), var(--purple));
+    color: var(--cream);
+    box-shadow: 0 8px 24px rgba(155, 77, 202, 0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(155, 77, 202, 0.45);
+  }
+  .btn-ghost {
+    color: var(--cream-dim);
+    border: 1px solid var(--line-bright);
+    background: rgba(176, 102, 217, 0.04);
+  }
+  .btn-ghost:hover {
+    color: var(--cream);
+    border-color: var(--purple-glow);
+    background: rgba(176, 102, 217, 0.08);
+  }
+  .btn-arrow { transition: transform 0.2s; }
+  .btn:hover .btn-arrow { transform: translateX(3px); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── Section base ─── */
+  section.s {
+    padding: 120px 0;
+    position: relative;
+  }
+  @media (max-width: 700px) { section.s { padding: 80px 0; } }
+
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--purple-glow);
+    margin-bottom: 18px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--purple-glow);
+    vertical-align: middle;
+    margin-right: 12px;
+    margin-bottom: 3px;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(28px, 4.5vw, 42px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    margin-bottom: 24px;
+    max-width: 720px;
+  }
+  .section-title em {
+    font-style: italic;
+    color: var(--purple-glow);
+    font-weight: 500;
+  }
+  .section-lead {
+    font-size: 16px;
+    color: var(--cream-dim);
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  /* ─── Apps grid ─── */
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 56px;
+  }
+  .app-card {
+    background: linear-gradient(145deg, rgba(176, 102, 217, 0.06), rgba(176, 102, 217, 0.02));
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .app-card:hover {
+    border-color: var(--line-bright);
+    transform: translateY(-4px);
+    box-shadow: 0 24px 60px rgba(155, 77, 202, 0.12);
+  }
+  .app-card.live::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--purple-glow), transparent);
+  }
+  .app-status {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .app-status.live {
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.25);
+  }
+  .app-status.beta {
+    color: var(--purple-glow);
+    background: rgba(176, 102, 217, 0.1);
+    border: 1px solid rgba(176, 102, 217, 0.3);
+  }
+  .app-status.dev {
+    color: var(--cream-faint);
+    background: rgba(250, 248, 255, 0.04);
+    border: 1px solid var(--line);
+  }
+  .app-status .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    margin-right: 5px;
+    vertical-align: middle;
+    margin-bottom: 2px;
+  }
+  .app-status.live .dot { animation: pulse 2s ease-in-out infinite; }
+  .app-icon {
+    font-size: 36px;
+    margin-bottom: 18px;
+    display: inline-block;
+  }
+  .app-card h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--cream);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .app-card .app-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--purple-glow);
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+  .app-card p {
+    font-size: 14px;
+    color: var(--cream-dim);
+    line-height: 1.6;
+    flex: 1;
+    margin-bottom: 20px;
+  }
+  .app-screenshot {
+    margin-top: 8px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--ink-2);
+    aspect-ratio: 9/16;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .app-screenshot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .app-screenshot.placeholder {
+    color: var(--cream-faintest);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .app-card-link {
+    margin-top: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--purple-glow);
+    text-decoration: none;
+    align-self: flex-start;
+    transition: gap 0.2s;
+  }
+  .app-card-link:hover { gap: 10px; }
+  .app-card-link.disabled {
+    color: var(--cream-faintest);
+    pointer-events: none;
+    cursor: default;
+  }
+
+  /* ─── Lab — personal projects, distinct from commercial apps ─── */
+  .lab-intro {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-top: 18px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .lab-intro-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--cream-faint);
+    letter-spacing: 0.5px;
+    padding: 5px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(176, 102, 217, 0.03);
+  }
+  .lab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .lab-card {
+    background: rgba(20, 9, 42, 0.4);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 22px 18px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .lab-card:hover {
+    border-color: var(--line-bright);
+    background: rgba(20, 9, 42, 0.6);
+    transform: translateY(-2px);
+  }
+  .lab-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+  .lab-card h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 19px;
+    color: var(--cream);
+    letter-spacing: -0.005em;
+    line-height: 1.25;
+  }
+  .lab-status {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 999px;
+    color: var(--cream-faint);
+    background: rgba(250, 248, 255, 0.04);
+    border: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  .lab-card p {
+    font-size: 13.5px;
+    color: var(--cream-dim);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    flex: 1;
+  }
+  .lab-shot {
+    margin: 0 -22px 16px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--ink-2);
+    overflow: hidden;
+    aspect-ratio: 16/10;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .lab-shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    opacity: 0.92;
+    transition: opacity 0.3s, transform 0.6s ease;
+  }
+  .lab-card:hover .lab-shot img {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  .lab-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+  }
+  .lab-stack .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--cream-faint);
+    padding: 3px 8px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: rgba(176, 102, 217, 0.04);
+    letter-spacing: 0.3px;
+  }
+
+  /* ─── About — split layout ─── */
+  .about-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    margin-top: 32px;
+  }
+  @media (max-width: 800px) {
+    .about-split { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .about-text p {
+    color: var(--cream-dim);
+    margin-bottom: 18px;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+  .about-text p strong {
+    color: var(--cream);
+    font-weight: 500;
+  }
+  .about-meta {
+    background: linear-gradient(145deg, rgba(176, 102, 217, 0.04), transparent);
+    border-left: 1px solid var(--line-bright);
+    padding: 4px 0 4px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+    color: var(--cream-dim);
+  }
+  .about-meta .key { color: var(--purple-glow); }
+  .about-meta .val { color: var(--cream); }
+  .about-meta a { color: var(--cream); text-decoration: underline; text-decoration-color: var(--line-bright); text-underline-offset: 3px; }
+  .about-meta a:hover { text-decoration-color: var(--purple-glow); }
+
+  /* ─── Manifesto strip — anti-corporate creed ─── */
+  .creed {
+    margin-top: 72px;
+    padding: 36px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(176, 102, 217, 0.04), transparent);
+  }
+  .creed-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--purple-glow);
+    margin-bottom: 22px;
+  }
+  .creed-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px 36px;
+    list-style: none;
+  }
+  .creed-list li {
+    font-size: 14.5px;
+    color: var(--cream-dim);
+    line-height: 1.6;
+    padding-left: 22px;
+    position: relative;
+  }
+  .creed-list li::before {
+    content: '×';
+    position: absolute;
+    left: 0;
+    top: -2px;
+    color: var(--purple-glow);
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .creed-list li.yes::before { content: '+'; color: #4ade80; }
+  .creed-list li strong { color: var(--cream); font-weight: 500; }
+
+  /* ─── Contact ─── */
+  .contact {
+    text-align: center;
+    padding: 100px 0 60px;
+  }
+  .contact-line {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(24px, 4vw, 36px);
+    line-height: 1.3;
+    color: var(--cream);
+    margin-bottom: 32px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .contact-line em {
+    font-style: italic;
+    color: var(--purple-glow);
+  }
+  .contact-email {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 28px;
+    border: 1px solid var(--line-bright);
+    border-radius: 10px;
+    background: rgba(176, 102, 217, 0.04);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--cream);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .contact-email:hover {
+    border-color: var(--purple-glow);
+    background: rgba(176, 102, 217, 0.1);
+    box-shadow: 0 8px 24px rgba(155, 77, 202, 0.2);
+  }
+  .contact-email::before {
+    content: '→';
+    color: var(--purple-glow);
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    padding: 40px 0 50px;
+    border-top: 1px solid var(--line);
+    margin-top: 80px;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--cream-faint);
+    letter-spacing: 0.4px;
+  }
+  .footer-mark {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-mark img {
+    width: 22px;
+    height: auto;
+    opacity: 0.7;
+  }
+  footer a { color: var(--cream-faint); text-decoration: none; transition: color 0.2s; }
+  footer a:hover { color: var(--purple-glow); }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="container nav-inner">
+    <a href="#top" class="nav-mark">
+      <span class="nav-mark-dot"></span>
+      tyriah_app_studios
+    </a>
+    <div class="nav-links">
+      <a href="#apps">Apps</a>
+      <a href="#lab">Lab</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<header class="hero" id="top">
+  <div class="container">
+    <img src="tyriah-logo.png" alt="Tyriah App Studios" class="hero-logo">
+    <div class="hero-eyebrow">Indie app studio · est. 2026</div>
+    <h1 class="hero-tagline">
+      Software, made by <em>one person,</em> for real humans.
+    </h1>
+    <p class="hero-sub">
+      Useful apps with information that actually makes sense. No bloat, no dark patterns, no quarterly roadmap.
+    </p>
+    <div class="hero-cta">
+      <a href="#apps" class="btn btn-primary">
+        See the apps <span class="btn-arrow">→</span>
+      </a>
+      <a href="#about" class="btn btn-ghost">
+        About the studio
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ─── APPS ─── -->
+<section class="s" id="apps">
+  <div class="container">
+    <div class="section-eyebrow">What I make</div>
+    <h2 class="section-title">Small apps that <em>do their job well.</em></h2>
+    <p class="section-lead">
+      One product is live. Two more are deep in development. Each one starts with a real problem someone I know is actually having — then gets built, refined, and shipped without a focus group ever entering the room.
+    </p>
+
+    <div class="apps-grid">
+
+      <!-- LIVE: Crafty Planner -->
+      <div class="app-card live">
+        <span class="app-status live"><span class="dot"></span>Live</span>
+        <span class="app-icon">📋</span>
+        <h3>Crafty Planner</h3>
+        <div class="app-tag">for handmade business owners</div>
+        <p>The whole "running your craft business" thing — orders, customers, expenses, invoices, taxes — built for the phone you actually use. No spreadsheets. No laptop. No monthly anxiety.</p>
+        <a href="https://craftyplanner.app" target="_blank" rel="noopener" class="app-card-link">
+          craftyplanner.app →
+        </a>
+      </div>
+
+      <!-- BETA: TT Weather -->
+      <div class="app-card">
+        <span class="app-status beta"><span class="dot"></span>Beta</span>
+        <span class="app-icon">⛈️</span>
+        <h3>TT Weather</h3>
+        <div class="app-tag">for weather watchers</div>
+        <p>Forecasts, severe alerts, sun path, ISS passes, and the kind of hour-by-hour detail you actually want — all in one calm, dark interface. Built for people who like knowing.</p>
+        <div class="app-screenshot">
+          <img src="tt-weather.png" alt="TT Weather screenshot" loading="lazy">
+        </div>
+        <span class="app-card-link disabled">launching after Crafty Planner →</span>
+      </div>
+
+      <!-- DEV: Caddie -->
+      <div class="app-card">
+        <span class="app-status dev"><span class="dot"></span>In development</span>
+        <span class="app-icon">⛳</span>
+        <h3>Caddie</h3>
+        <div class="app-tag">for golfers</div>
+        <p>A pocket caddie — handicap tracking, wind-adjusted club recommendations, hole-by-hole notes. Built for the golfer who wants smart info without a $99/year membership.</p>
+        <div class="app-screenshot">
+          <img src="caddie.png" alt="Caddie screenshot" loading="lazy">
+        </div>
+        <span class="app-card-link disabled">coming later this year →</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── LAB · personal projects, not for sale ─── -->
+<section class="s" id="lab">
+  <div class="container">
+    <div class="section-eyebrow">The lab</div>
+    <h2 class="section-title">Things I built <em>because I wanted to.</em></h2>
+    <p class="section-lead">
+      Side projects, prototypes, and apps built for family. Not for sale, not in app stores — just the kind of thing a developer makes when an idea won't leave them alone. Here for the curious.
+    </p>
+    <div class="lab-intro">
+      <span class="lab-intro-tag">// status: personal · source: solo</span>
+    </div>
+
+    <div class="lab-grid">
+
+      <!-- GameDay Vintage -->
+      <div class="lab-card">
+        <div class="lab-card-head">
+          <h3>GameDay Vintage</h3>
+          <span class="lab-status">Personal</span>
+        </div>
+        <p>A retro-styled multi-sport dashboard — live scores, box scores, play-by-play, and fantasy lineup tracking across the NFL, NBA, MLB, and NHL. Built around the look and feel of an old ballpark scoreboard.</p>
+        <div class="lab-shot">
+          <img src="gameday-vintage.png" alt="GameDay Vintage" loading="lazy">
+        </div>
+        <div class="lab-stack">
+          <span class="chip">Single-file PWA</span>
+          <span class="chip">Cloudflare Worker</span>
+          <span class="chip">Fantasy OAuth</span>
+          <span class="chip">Live polling</span>
+        </div>
+      </div>
+
+      <!-- Dragon Academy -->
+      <div class="lab-card">
+        <div class="lab-card-head">
+          <h3>Dragon Academy</h3>
+          <span class="lab-status">Personal</span>
+        </div>
+        <p>An educational PWA built for younger family members — math, reading, science, and social studies wrapped in a dragon-trainer adventure. Mini-games, a fish-economy progression system, and quizzes keyed to grade level.</p>
+        <div class="lab-shot">
+          <img src="dragon-academy.png" alt="Dragon Academy" loading="lazy">
+        </div>
+        <div class="lab-stack">
+          <span class="chip">PWA</span>
+          <span class="chip">Claude API</span>
+          <span class="chip">Mini-games</span>
+          <span class="chip">Progression system</span>
+        </div>
+      </div>
+
+      <!-- Arcade -->
+      <div class="lab-card">
+        <div class="lab-card-head">
+          <h3>Arcade</h3>
+          <span class="lab-status">Personal</span>
+        </div>
+        <p>Nineteen classic arcade and puzzle games rebuilt from scratch in vanilla JavaScript — Tetris, Galaga, Snake, Minesweeper, Solitaire, and the rest. Persistent leaderboards, a CRT-green retro shell, no ads, no microtransactions.</p>
+        <div class="lab-shot">
+          <img src="arcade.png" alt="Arcade" loading="lazy">
+        </div>
+        <div class="lab-stack">
+          <span class="chip">Vanilla JS</span>
+          <span class="chip">Canvas</span>
+          <span class="chip">19 games</span>
+          <span class="chip">localStorage</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section class="s" id="about">
+  <div class="container">
+    <div class="section-eyebrow">About the studio</div>
+    <h2 class="section-title">A second shot at <em>the thing I always wanted to do.</em></h2>
+
+    <div class="about-split">
+      <div class="about-text">
+        <p>Tyriah App Studios is a one-person operation run out of <strong>Loveland, Colorado</strong>.</p>
+        <p>I grew up in <strong>Amarillo, Texas</strong>, and lived there for thirty years before heading to the mountains. I've always wanted to be a developer — even started college trying to be one. It didn't pan out the first time around.</p>
+        <p>This studio is the second attempt. The goal hasn't changed: build apps that <strong>make sense</strong>, that are <strong>actually usable</strong>, with information that's <strong>worth your time</strong>. The kind of small, careful software that big companies stopped making a decade ago.</p>
+        <p>Every app you see here is designed, built, tested, supported, and maintained by one person. That's not a limitation — it's the whole point.</p>
+      </div>
+
+      <div class="about-meta">
+        <div><span class="key">studio</span>     <span class="val">Tyriah App Studios</span></div>
+        <div><span class="key">based</span>      <span class="val">Loveland, CO</span></div>
+        <div><span class="key">founder</span>    <span class="val">Ty McKinney</span></div>
+        <div><span class="key">est</span>        <span class="val">2026</span></div>
+        <div><span class="key">team_size</span>  <span class="val">1</span></div>
+        <div><span class="key">apps_live</span>  <span class="val">1</span></div>
+        <div><span class="key">in_progress</span> <span class="val">2</span></div>
+        <div><span class="key">contact</span>    <a href="mailto:tyriahappstudios@gmail.com">tyriahappstudios@gmail.com</a></div>
+      </div>
+    </div>
+
+    <!-- Anti-corporate creed -->
+    <div class="creed">
+      <div class="creed-title">// what this studio doesn't do · and what it does</div>
+      <ul class="creed-list">
+        <li>No tracking pixels, no behavioral analytics</li>
+        <li>No dark patterns or fake urgency</li>
+        <li>No subscriptions for things that should be one-time</li>
+        <li>No quarterly roadmap promises</li>
+        <li>No AI features bolted on for a press release</li>
+        <li class="yes"><strong>Real software</strong> built by a real person</li>
+        <li class="yes"><strong>Bug fixes</strong> that ship the same week</li>
+        <li class="yes"><strong>Direct contact</strong> with the developer when you email</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section class="s contact" id="contact">
+  <div class="container">
+    <div class="section-eyebrow">Get in touch</div>
+    <p class="contact-line">
+      Got an idea, found a bug, or just want to say <em>hi?</em>
+    </p>
+    <a href="mailto:tyriahappstudios@gmail.com" class="contact-email">
+      tyriahappstudios@gmail.com
+    </a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-mark">
+      <img src="tyriah-logo.png" alt="">
+      <span>© 2026 Tyriah App Studios</span>
+    </div>
+    <div>Made in Loveland, Colorado</div>
+  </div>
+</footer>
+
+</body>
+</html>
